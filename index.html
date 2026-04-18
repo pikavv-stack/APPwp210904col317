@@ -3,10 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WordPress 임시글 발행기</title>
+<meta name="theme-color" content="#185FA5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="WP 발행기">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>WP 임시글 발행기</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;min-height:100vh;padding:1.5rem}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;min-height:100vh;padding:1.5rem;padding-bottom:2rem}
 .app{max-width:560px;margin:0 auto}
 h1{font-size:20px;font-weight:600;color:#111;margin-bottom:4px}
 .sub{font-size:13px;color:#666;margin-bottom:1.5rem}
@@ -18,48 +25,56 @@ h1{font-size:20px;font-weight:600;color:#111;margin-bottom:4px}
 .badge.error{background:#FCEBEB;color:#791F1F}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
 .field label{font-size:12px;color:#555;display:block;margin-bottom:4px}
-.field input{width:100%;height:38px;padding:0 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;color:#111;outline:none;background:#fafafa}
+.field input{width:100%;height:42px;padding:0 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;color:#111;outline:none;background:#fafafa}
 .field input:focus{border-color:#185FA5;background:#fff}
 .token-row{display:flex;gap:8px;align-items:flex-end}
 .token-row .field{flex:1}
-.token-save-btn{height:38px;padding:0 14px;border:1px solid #185FA5;border-radius:8px;background:#185FA5;color:#fff;font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap}
+.token-save-btn{height:42px;padding:0 16px;border:1px solid #185FA5;border-radius:8px;background:#185FA5;color:#fff;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
 .token-save-btn:hover{background:#0C447C}
 .token-status{font-size:11px;margin-top:4px}
 .token-status.saved{color:#27500A}
 .token-status.empty{color:#aaa}
 .tab-row{display:flex;gap:6px;margin-bottom:12px}
-.tab{padding:5px 12px;border:1px solid #ddd;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;background:#fafafa;color:#666}
+.tab{padding:6px 14px;border:1px solid #ddd;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;background:#fafafa;color:#666}
 .tab.active{background:#185FA5;color:#fff;border-color:#185FA5}
-.keyword-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:12px;max-height:280px;overflow-y:auto}
-.kw-btn{padding:8px 10px;border:1px solid #ddd;border-radius:8px;background:#fafafa;font-size:13px;color:#111;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:border-color 0.15s}
+.keyword-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:12px;max-height:300px;overflow-y:auto}
+.kw-btn{padding:10px 10px;border:1px solid #ddd;border-radius:8px;background:#fafafa;font-size:13px;color:#111;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:border-color 0.15s}
 .kw-btn:hover{border-color:#aaa;background:#f0f0f0}
 .kw-btn.selected{border-color:#185FA5;background:#E6F1FB;color:#0C447C;font-weight:500}
-.kw-btn .del{font-size:14px;color:#aaa;padding:0 2px;opacity:0}
+.kw-btn .del{font-size:14px;color:#aaa;padding:0 4px;opacity:0}
 .kw-btn:hover .del{opacity:1}
 .divider{height:1px;background:#f0f0f0;margin:12px 0}
 .add-row{display:flex;gap:8px}
-.add-row input{flex:1;height:38px;padding:0 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;color:#111;outline:none}
+.add-row input{flex:1;height:42px;padding:0 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;color:#111;outline:none}
 .add-row input:focus{border-color:#185FA5}
-.add-row button{height:38px;padding:0 16px;border:1px solid #ddd;border-radius:8px;background:#fff;font-size:13px;color:#111;cursor:pointer}
+.add-row button{height:42px;padding:0 18px;border:1px solid #ddd;border-radius:8px;background:#fff;font-size:14px;color:#111;cursor:pointer}
 .add-row button:hover{background:#f5f5f5}
-.selected-box{background:#f9f9f9;border-radius:8px;padding:12px;margin-bottom:12px;min-height:64px}
+.selected-box{background:#f9f9f9;border-radius:8px;padding:14px;margin-bottom:12px;min-height:68px}
 .selected-box .label{font-size:12px;color:#888;margin-bottom:4px}
-.selected-box .value{font-size:15px;font-weight:600;color:#111}
+.selected-box .value{font-size:16px;font-weight:600;color:#111}
 .selected-box .preview{font-size:12px;color:#666;margin-top:4px}
-.publish-btn{width:100%;height:46px;border:none;border-radius:10px;background:#185FA5;color:#fff;font-size:15px;font-weight:600;cursor:pointer}
+.publish-btn{width:100%;height:50px;border:none;border-radius:12px;background:#185FA5;color:#fff;font-size:16px;font-weight:600;cursor:pointer}
 .publish-btn:hover{background:#0C447C}
+.publish-btn:active{transform:scale(0.98)}
 .publish-btn:disabled{opacity:0.4;cursor:not-allowed}
-.toast{padding:12px 16px;border-radius:10px;font-size:13px;margin-bottom:12px;display:none;font-weight:500}
+.toast{padding:14px 16px;border-radius:12px;font-size:14px;margin-bottom:12px;display:none;font-weight:500}
 .toast.success{background:#EAF3DE;color:#27500A;border:1px solid #97C459;display:block}
 .toast.error{background:#FCEBEB;color:#791F1F;border:1px solid #F09595;display:block}
-.refresh-btn{font-size:11px;padding:2px 8px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer;color:#555}
+.refresh-btn{font-size:11px;padding:3px 10px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer;color:#555}
 .refresh-btn:hover{background:#f5f5f5}
-.empty{font-size:13px;color:#aaa;text-align:center;padding:20px 0}
+.empty{font-size:13px;color:#aaa;text-align:center;padding:24px 0;line-height:1.8}
+.install-bar{background:#185FA5;color:#fff;padding:10px 16px;border-radius:10px;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.install-bar button{background:#fff;color:#185FA5;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer}
 </style>
 </head>
 <body>
 <div class="app">
-  <h1>WordPress 임시글 발행기</h1>
+  <div id="install-bar" class="install-bar" style="display:none">
+    <span>홈 화면에 앱으로 추가하세요</span>
+    <button onclick="installApp()">설치</button>
+  </div>
+
+  <h1>WP 임시글 발행기</h1>
   <p class="sub">키워드를 선택하고 GitHub Actions로 발행합니다</p>
 
   <div id="toast" class="toast"></div>
@@ -121,6 +136,24 @@ var selected = null;
 var currentTab = 'remote';
 var remoteKeywords = [];
 var manualKeywords = JSON.parse(localStorage.getItem('wp_manual_keywords') || '[]');
+var deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-bar').style.display = 'flex';
+});
+
+window.addEventListener('appinstalled', function(){
+  document.getElementById('install-bar').style.display = 'none';
+});
+
+function installApp(){
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function(){ deferredPrompt = null; });
+  }
+}
 
 function loadSavedToken(){
   var saved = localStorage.getItem('wp_gh_token');
@@ -157,10 +190,7 @@ function loadRemoteKeywords(){
   badge.textContent = '로딩 중...';
   var url = 'https://raw.githubusercontent.com/' + REPO_USER + '/' + REPO_NAME + '/main/keywords.json?t=' + Date.now();
   fetch(url)
-    .then(function(res){
-      if(!res.ok) throw new Error('파일 없음');
-      return res.json();
-    })
+    .then(function(res){ if(!res.ok) throw new Error('파일 없음'); return res.json(); })
     .then(function(data){
       remoteKeywords = Array.isArray(data) ? data : [];
       badge.className = 'badge success';
@@ -177,24 +207,14 @@ function loadRemoteKeywords(){
 function renderKeywords(){
   if(currentTab === 'remote'){
     var grid = document.getElementById('remote-grid');
-    if(remoteKeywords.length === 0){
-      grid.innerHTML = '<div class="empty">수집된 키워드가 없습니다.<br>Actions에서 collect를 먼저 실행해 주세요.</div>';
-      return;
-    }
+    if(remoteKeywords.length === 0){ grid.innerHTML = '<div class="empty">수집된 키워드가 없습니다.<br>Actions에서 collect를 먼저 실행해 주세요.</div>'; return; }
     grid.innerHTML = '';
-    remoteKeywords.forEach(function(kw){
-      grid.appendChild(makeKwBtn(kw, null, false));
-    });
+    remoteKeywords.forEach(function(kw){ grid.appendChild(makeKwBtn(kw, null, false)); });
   } else {
     var grid2 = document.getElementById('manual-grid');
-    if(manualKeywords.length === 0){
-      grid2.innerHTML = '<div class="empty">직접 추가한 키워드가 없습니다.</div>';
-      return;
-    }
+    if(manualKeywords.length === 0){ grid2.innerHTML = '<div class="empty">직접 추가한 키워드가 없습니다.</div>'; return; }
     grid2.innerHTML = '';
-    manualKeywords.forEach(function(kw, i){
-      grid2.appendChild(makeKwBtn(kw, i, true));
-    });
+    manualKeywords.forEach(function(kw, i){ grid2.appendChild(makeKwBtn(kw, i, true)); });
   }
 }
 
@@ -220,9 +240,7 @@ function selectKw(kw){
 
 function delKw(i){
   if(selected === manualKeywords[i]){ selected = null; resetSelected(); }
-  manualKeywords.splice(i, 1);
-  saveManual();
-  renderKeywords();
+  manualKeywords.splice(i, 1); saveManual(); renderKeywords();
 }
 
 function resetSelected(){
@@ -236,16 +254,12 @@ function addKeyword(){
   var inp = document.getElementById('new-kw');
   var val = inp.value.trim();
   if(!val || manualKeywords.indexOf(val) > -1) return;
-  manualKeywords.push(val);
-  saveManual();
-  renderKeywords();
-  inp.value = '';
+  manualKeywords.push(val); saveManual(); renderKeywords(); inp.value = '';
 }
 
 function showToast(msg, type){
   var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast ' + type;
+  t.textContent = msg; t.className = 'toast ' + type;
   setTimeout(function(){ t.className = 'toast'; }, 5000);
 }
 
@@ -257,36 +271,27 @@ function publish(){
   if(!token){ showToast('GitHub Token을 입력해주세요', 'error'); return; }
   if(!selected){ showToast('키워드를 선택해주세요', 'error'); return; }
   var btn = document.getElementById('publish-btn');
-  btn.disabled = true;
-  btn.textContent = '발행 중...';
+  btn.disabled = true; btn.textContent = '발행 중...';
   fetch('https://api.github.com/repos/' + user + '/' + repo + '/actions/workflows/' + workflow + '/dispatches', {
     method: 'POST',
-    headers: {
-      'Authorization': 'Bearer ' + token,
-      'Accept': 'application/vnd.github+json',
-      'Content-Type': 'application/json'
-    },
+    headers: {'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json'},
     body: JSON.stringify({ ref: 'main', inputs: { keyword: selected, mode: 'publish' } })
   }).then(function(res){
     if(res.status === 204){
-      showToast('"' + selected + '" 발행 요청 완료! WordPress에 임시글이 생성됩니다.', 'success');
-      selected = null;
-      resetSelected();
-      renderKeywords();
+      showToast('"' + selected + '" 발행 요청 완료!', 'success');
+      selected = null; resetSelected(); renderKeywords();
     } else {
-      res.json().then(function(err){
-        showToast('오류 ' + res.status + ': ' + (err.message || '발행 실패'), 'error');
-      }).catch(function(){ showToast('오류 ' + res.status, 'error'); });
+      res.json().then(function(err){ showToast('오류 ' + res.status + ': ' + (err.message || '발행 실패'), 'error'); }).catch(function(){ showToast('오류 ' + res.status, 'error'); });
     }
-  }).catch(function(e){
-    showToast('오류: ' + e.message, 'error');
-  }).finally(function(){
-    btn.textContent = '임시글 발행하기';
-    btn.disabled = !selected;
-  });
+  }).catch(function(e){ showToast('오류: ' + e.message, 'error'); })
+  .finally(function(){ btn.textContent = '임시글 발행하기'; btn.disabled = !selected; });
 }
 
 document.getElementById('new-kw').addEventListener('keydown', function(e){ if(e.key === 'Enter') addKeyword(); });
+
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').then(function(){ console.log('SW 등록 완료'); });
+}
 
 loadSavedToken();
 loadRemoteKeywords();
