@@ -20,6 +20,13 @@ h1{font-size:20px;font-weight:600;color:#111;margin-bottom:4px}
 .field label{font-size:12px;color:#555;display:block;margin-bottom:4px}
 .field input{width:100%;height:38px;padding:0 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;color:#111;outline:none;background:#fafafa}
 .field input:focus{border-color:#185FA5;background:#fff}
+.token-row{display:flex;gap:8px;align-items:flex-end}
+.token-row .field{flex:1}
+.token-save-btn{height:38px;padding:0 14px;border:1px solid #185FA5;border-radius:8px;background:#185FA5;color:#fff;font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap}
+.token-save-btn:hover{background:#0C447C}
+.token-status{font-size:11px;margin-top:4px}
+.token-status.saved{color:#27500A}
+.token-status.empty{color:#aaa}
 .tab-row{display:flex;gap:6px;margin-bottom:12px}
 .tab{padding:5px 12px;border:1px solid #ddd;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;background:#fafafa;color:#666}
 .tab.active{background:#185FA5;color:#fff;border-color:#185FA5}
@@ -29,7 +36,6 @@ h1{font-size:20px;font-weight:600;color:#111;margin-bottom:4px}
 .kw-btn.selected{border-color:#185FA5;background:#E6F1FB;color:#0C447C;font-weight:500}
 .kw-btn .del{font-size:14px;color:#aaa;padding:0 2px;opacity:0}
 .kw-btn:hover .del{opacity:1}
-.kw-source{font-size:10px;color:#aaa;display:block;margin-top:2px}
 .divider{height:1px;background:#f0f0f0;margin:12px 0}
 .add-row{display:flex;gap:8px}
 .add-row input{flex:1;height:38px;padding:0 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;color:#111;outline:none}
@@ -64,10 +70,15 @@ h1{font-size:20px;font-weight:600;color:#111;margin-bottom:4px}
       <div class="field"><label>GitHub 사용자명</label><input id="cfg-user" type="text" value="pikavv-stack"></div>
       <div class="field"><label>레포 이름</label><input id="cfg-repo" type="text" value="wp210904col317"></div>
     </div>
-    <div class="grid2">
-      <div class="field"><label>워크플로우 파일명</label><input id="cfg-workflow" type="text" value="draft_post.yml"></div>
-      <div class="field"><label>GitHub Token</label><input id="cfg-token" type="password" placeholder="ghp_xxxxxxxxxxxx"></div>
+    <div class="field" style="margin-bottom:8px"><label>워크플로우 파일명</label><input id="cfg-workflow" type="text" value="draft_post.yml"></div>
+    <div class="token-row">
+      <div class="field">
+        <label>GitHub Token</label>
+        <input id="cfg-token" type="password" placeholder="ghp_xxxxxxxxxxxx">
+      </div>
+      <button class="token-save-btn" onclick="saveToken()">저장</button>
     </div>
+    <div id="token-status" class="token-status empty">토큰이 저장되지 않았습니다</div>
   </div>
 
   <div class="section">
@@ -111,6 +122,24 @@ var currentTab = 'remote';
 var remoteKeywords = [];
 var manualKeywords = JSON.parse(localStorage.getItem('wp_manual_keywords') || '[]');
 
+function loadSavedToken(){
+  var saved = localStorage.getItem('wp_gh_token');
+  if(saved){
+    document.getElementById('cfg-token').value = saved;
+    document.getElementById('token-status').textContent = '토큰이 저장되어 있습니다';
+    document.getElementById('token-status').className = 'token-status saved';
+  }
+}
+
+function saveToken(){
+  var token = document.getElementById('cfg-token').value.trim();
+  if(!token){ showToast('토큰을 입력해주세요', 'error'); return; }
+  localStorage.setItem('wp_gh_token', token);
+  document.getElementById('token-status').textContent = '토큰이 저장되었습니다';
+  document.getElementById('token-status').className = 'token-status saved';
+  showToast('토큰이 저장되었습니다', 'success');
+}
+
 function saveManual(){ localStorage.setItem('wp_manual_keywords', JSON.stringify(manualKeywords)); }
 
 function switchTab(tab, el){
@@ -138,7 +167,7 @@ function loadRemoteKeywords(){
       badge.textContent = '오늘 수집 ' + remoteKeywords.length + '개';
       renderKeywords();
     })
-    .catch(function(e){
+    .catch(function(){
       badge.className = 'badge error';
       badge.textContent = '불러오기 실패';
       document.getElementById('remote-grid').innerHTML = '<div class="empty">키워드를 불러올 수 없습니다.<br>Actions에서 collect를 먼저 실행해 주세요.</div>';
@@ -259,6 +288,7 @@ function publish(){
 
 document.getElementById('new-kw').addEventListener('keydown', function(e){ if(e.key === 'Enter') addKeyword(); });
 
+loadSavedToken();
 loadRemoteKeywords();
 renderKeywords();
 </script>
