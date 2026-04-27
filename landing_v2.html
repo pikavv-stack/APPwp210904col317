@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정부지원금 알림 무료 구독 — 생활 속 절약 재테크</title>
+<meta name="description" content="재산세 감면, 기초연금, 노인일자리 등 정부지원금 새 소식을 가장 먼저 받아보세요. 완전 무료.">
+
+<!-- 원시그널 SDK -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "84831f64-2063-4ab8-aba3-eec4c73245e9",
+    });
+  });
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+
+:root {
+  --blue:       #1A3C6E;
+  --blue-mid:   #2563EB;
+  --orange:     #EA580C;
+  --sky:        #EFF6FF;
+  --green:      #16A34A;
+  --gray:       #374151;
+  --gray-light: #F3F4F6;
+  --white:      #FFFFFF;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: #F9FAFB;
+  color: var(--gray);
+  line-height: 1.7;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* ── 상단 바 ── */
+.top-bar {
+  background: var(--blue);
+  color: #fff;
+  text-align: center;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ── 히어로 ── */
+.hero {
+  background: linear-gradient(150deg, #1A3C6E 0%, #2563EB 100%);
+  color: #fff;
+  padding: 52px 20px 44px;
+  text-align: center;
+}
+
+.badge {
+  display: inline-block;
+  background: var(--orange);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 16px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+  letter-spacing: 0.5px;
+}
+
+.hero h1 {
+  font-size: clamp(22px, 5vw, 36px);
+  font-weight: 900;
+  line-height: 1.4;
+  margin-bottom: 14px;
+  word-break: keep-all;
+}
+
+.hero h1 em { color: #FCD34D; font-style: normal; }
+
+.hero p {
+  font-size: 15px;
+  opacity: 0.88;
+  margin-bottom: 28px;
+  word-break: keep-all;
+}
+
+.btn-main {
+  display: inline-block;
+  background: var(--orange);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 900;
+  padding: 16px 40px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(234,88,12,0.45);
+  transition: transform .15s, box-shadow .15s;
+  animation: glow 2.2s infinite;
+}
+
+.btn-main:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(234,88,12,0.55);
+}
+
+@keyframes glow {
+  0%,100% { box-shadow: 0 4px 20px rgba(234,88,12,0.45); }
+  50%      { box-shadow: 0 4px 32px rgba(234,88,12,0.75); }
+}
+
+.hero-note {
+  font-size: 12px;
+  opacity: 0.65;
+  margin-top: 12px;
+}
+
+/* ── 혜택 태그 ── */
+.tags {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 20px 16px;
+  background: var(--blue);
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.tag {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+
+/* ── 섹션 공통 ── */
+.section { padding: 44px 16px; }
+.section-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--blue);
+  margin-bottom: 24px;
+  word-break: keep-all;
+}
+
+/* ── 최신 글 목록 ── */
+.posts-section { background: #fff; }
+
+.post-list {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.post-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--sky);
+  border-radius: 14px;
+  padding: 16px;
+  border-left: 4px solid var(--blue-mid);
+  transition: transform .15s, box-shadow .15s;
+  cursor: pointer;
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(37,99,235,0.12);
+}
+
+.post-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: #fff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.post-info { flex: 1; min-width: 0; }
+
+.post-category {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--blue-mid);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.post-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 4px;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.post-desc {
+  font-size: 12px;
+  color: var(--gray);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.post-arrow {
+  font-size: 18px;
+  color: var(--blue-mid);
+  flex-shrink: 0;
+}
+
+.more-btn {
+  display: block;
+  text-align: center;
+  margin: 20px auto 0;
+  max-width: 200px;
+  padding: 12px 24px;
+  border: 2px solid var(--blue-mid);
+  border-radius: 999px;
+  color: var(--blue-mid);
+  font-size: 14px;
+  font-weight: 700;
+  transition: background .15s, color .15s;
+}
+
+.more-btn:hover {
+  background: var(--blue-mid);
+  color: #fff;
+}
+
+/* ── 알림 미리보기 ── */
+.preview-section { background: var(--sky); }
+
+.notif-list {
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notif-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border: 1px solid #E5E7EB;
+}
+
+.notif-dot {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.notif-body h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 3px;
+}
+
+.notif-body p {
+  font-size: 12px;
+  color: var(--gray);
+  word-break: keep-all;
+}
+
+.notif-time {
+  font-size: 10px;
+  color: #9CA3AF;
+  margin-top: 5px;
+}
+
+/* ── 통계 ── */
+.stats-section {
+  background: var(--blue);
+  padding: 44px 16px;
+}
+
+.stats-grid {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+  color: #fff;
+}
+
+.stat strong {
+  display: block;
+  font-size: 34px;
+  font-weight: 900;
+  color: #FCD34D;
+}
+
+.stat span {
+  font-size: 13px;
+  opacity: 0.82;
+}
+
+/* ── 하단 CTA ── */
+.cta-section {
+  background: #fff;
+  padding: 52px 16px;
+  text-align: center;
+}
+
+.cta-section h2 {
+  font-size: clamp(20px, 4vw, 28px);
+  font-weight: 900;
+  color: var(--blue);
+  margin-bottom: 10px;
+  word-break: keep-all;
+}
+
+.cta-section p {
+  font-size: 14px;
+  color: var(--gray);
+  margin-bottom: 28px;
+  word-break: keep-all;
+}
+
+.cta-note {
+  font-size: 12px;
+  color: #9CA3AF;
+  margin-top: 14px;
+}
+
+/* ── 푸터 ── */
+footer {
+  background: #111827;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  padding: 24px 16px;
+  font-size: 12px;
+}
+
+footer a { color: rgba(255,255,255,0.7); }
+
+/* ── 로딩 스피너 ── */
+.loading {
+  text-align: center;
+  padding: 32px;
+  color: var(--gray);
+  font-size: 14px;
+}
+
+@media (max-width: 480px) {
+  .stats-grid { gap: 28px; }
+  .btn-main { font-size: 15px; padding: 14px 32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 상단 바 -->
+<div class="top-bar">
+  📢 새 정부지원금 소식, 가장 먼저 받아보세요 — 완전 무료
+</div>
+
+<!-- 히어로 -->
+<section class="hero">
+  <div class="badge">🔔 무료 알림 서비스</div>
+  <h1>어르신께 꼭 필요한<br><em>정부지원금 소식</em><br>놓치지 마세요</h1>
+  <p>기초연금·재산세 감면·노인일자리까지<br>새 소식이 뜨면 바로 알려드립니다</p>
+  <button class="btn-main" onclick="subscribe()">🔔 무료로 알림 받기</button>
+  <p class="hero-note">광고 없음 · 언제든지 취소 가능 · 완전 무료</p>
+</section>
+
+<!-- 혜택 태그 -->
+<div class="tags">
+  <span class="tag">🏠 재산세 감면</span>
+  <span class="tag">💰 기초연금</span>
+  <span class="tag">🚗 자동차세 연납</span>
+  <span class="tag">💼 노인일자리</span>
+  <span class="tag">💊 의료비 지원</span>
+  <span class="tag">🏥 건강보험 경감</span>
+</div>
+
+<!-- 최신 글 목록 -->
+<section class="section posts-section">
+  <h2 class="section-title">📰 최신 정부지원금 정보</h2>
+  <div class="post-list" id="post-list">
+    <div class="loading">글 목록을 불러오는 중...</div>
+  </div>
+  <a href="https://wp210904col317.com" class="more-btn" target="_blank">
+    글 더 보기 →
+  </a>
+</section>
+
+<!-- 알림 미리보기 -->
+<section class="section preview-section">
+  <h2 class="section-title">📱 이렇게 알림이 옵니다</h2>
+  <div class="notif-list">
+    <div class="notif-card">
+      <div class="notif-dot">💰</div>
+      <div class="notif-body">
+        <h4>기초연금 신청 기간 안내</h4>
+        <p>만 65세 이상 어르신 신청 가능 — 주민센터 또는 복지로에서 신청하세요</p>
+        <p class="notif-time">방금 전</p>
+      </div>
+    </div>
+    <div class="notif-card">
+      <div class="notif-dot">💼</div>
+      <div class="notif-body">
+        <h4>노인일자리 신청 공고 — 전국</h4>
+        <p>이번 달 말까지 신청 가능 · 월 27만원 · 주 3일 근무</p>
+        <p class="notif-time">어제</p>
+      </div>
+    </div>
+    <div class="notif-card">
+      <div class="notif-dot">🏠</div>
+      <div class="notif-body">
+        <h4>재산세 감면 신청 시작됐습니다</h4>
+        <p>65세 이상 1주택자 신청 가능 — 위택스에서 신청하세요</p>
+        <p class="notif-time">3일 전</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 통계 -->
+<section class="stats-section">
+  <div class="stats-grid">
+    <div class="stat">
+      <strong>100%</strong>
+      <span>완전 무료</span>
+    </div>
+    <div class="stat">
+      <strong>주 1~2회</strong>
+      <span>적당한 알림</span>
+    </div>
+    <div class="stat">
+      <strong>즉시</strong>
+      <span>언제든 취소</span>
+    </div>
+  </div>
+</section>
+
+<!-- 하단 CTA -->
+<section class="cta-section">
+  <h2>지금 바로 무료로<br>알림을 받아보세요</h2>
+  <p>놓치기 쉬운 정부지원금 소식,<br>저희가 대신 찾아서 알려드립니다</p>
+  <button class="btn-main" onclick="subscribe()">🔔 무료 알림 구독하기</button>
+  <p class="cta-note">스팸 없음 · 광고 없음 · 언제든 취소 가능</p>
+</section>
+
+<!-- 푸터 -->
+<footer>
+  <p>© 2026 생활 속 절약 및 재테크</p>
+  <p style="margin-top:6px;">
+    <a href="https://wp210904col317.com">블로그 바로가기</a> ·
+    <a href="https://wp210904col317.com/privacy">개인정보처리방침</a>
+  </p>
+  <p style="margin-top:6px;opacity:0.4;">본 알림 서비스는 완전 무료이며 언제든지 취소하실 수 있습니다</p>
+</footer>
+
+<script>
+// ── 원시그널 구독 함수 ────────────────────────────────────
+function subscribe() {
+  if (window.OneSignal) {
+    OneSignal.push(function() {
+      OneSignal.showNativePrompt();
+    });
+  } else {
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(function(OneSignal) {
+      OneSignal.showNativePrompt();
+    });
+  }
+}
+
+// ── WordPress RSS로 최신 글 목록 가져오기 ─────────────────
+const BLOG_URL = 'https://wp210904col317.com';
+const RSS_URL  = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(BLOG_URL + '/feed/')}&api_key=public&count=6`;
+
+const ICONS = {
+  '기초연금': '💰', '재산세': '🏠', '자동차세': '🚗',
+  '노인일자리': '💼', '의료': '💊', '건강': '🏥',
+  '장기요양': '🤲', '연금': '💰', '지원금': '💵',
+  '복지': '🌿', '혜택': '✨'
+};
+
+function getIcon(title) {
+  for (const [key, icon] of Object.entries(ICONS)) {
+    if (title.includes(key)) return icon;
+  }
+  return '📋';
+}
+
+function getCategory(title) {
+  if (title.includes('기초연금') || title.includes('연금')) return '기초연금';
+  if (title.includes('재산세')) return '재산세 감면';
+  if (title.includes('자동차세')) return '자동차세';
+  if (title.includes('노인일자리')) return '노인일자리';
+  if (title.includes('의료') || title.includes('건강')) return '의료 지원';
+  if (title.includes('장기요양')) return '장기요양';
+  return '정부지원금';
+}
+
+async function loadPosts() {
+  const container = document.getElementById('post-list');
+  try {
+    const res  = await fetch(RSS_URL);
+    const data = await res.json();
+
+    if (!data.items || data.items.length === 0) {
+      container.innerHTML = '<div class="loading">최신 글을 불러올 수 없습니다.</div>';
+      return;
+    }
+
+    container.innerHTML = data.items.map(item => {
+      const title    = item.title || '';
+      const link     = item.link  || BLOG_URL;
+      const desc     = item.description
+                         ? item.description.replace(/<[^>]+>/g,'').slice(0,60) + '…'
+                         : '자세한 내용을 확인하세요';
+      const icon     = getIcon(title);
+      const category = getCategory(title);
+
+      return `
+        <a class="post-card" href="${link}" target="_blank">
+          <div class="post-icon">${icon}</div>
+          <div class="post-info">
+            <div class="post-category">${category}</div>
+            <div class="post-title">${title}</div>
+            <div class="post-desc">${desc}</div>
+          </div>
+          <div class="post-arrow">›</div>
+        </a>`;
+    }).join('');
+
+  } catch (e) {
+    // RSS 실패 시 고정 링크로 대체
+    container.innerHTML = `
+      <a class="post-card" href="${BLOG_URL}" target="_blank">
+        <div class="post-icon">📋</div>
+        <div class="post-info">
+          <div class="post-category">정부지원금</div>
+          <div class="post-title">최신 정부지원금 정보 보기</div>
+          <div class="post-desc">블로그에서 다양한 지원금 정보를 확인하세요</div>
+        </div>
+        <div class="post-arrow">›</div>
+      </a>`;
+  }
+}
+
+loadPosts();
+</script>
+</body>
+</html>
